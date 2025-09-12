@@ -16,8 +16,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { getSuggestions } from "@/app/actions";
-import type { SuggestAdditionalIngredientsOutput } from "@/ai/flows/suggest-additional-ingredients";
+import { getSuggestions, getRecipes } from "@/app/actions";
+import type { SuggestAdditionalIngredientsOutput, GenerateRecipesOutput } from "@/ai/types";
 import { SuggestedIngredients } from "./suggested-ingredients";
 
 const formSchema = z.object({
@@ -27,10 +27,10 @@ const formSchema = z.object({
 });
 
 type IngredientFormProps = {
-  onGenerate: () => void;
+  onRecipesGenerated: (recipes: GenerateRecipesOutput) => void;
 };
 
-export function IngredientForm({ onGenerate }: IngredientFormProps) {
+export function IngredientForm({ onRecipesGenerated }: IngredientFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] =
     useState<SuggestAdditionalIngredientsOutput | null>(null);
@@ -47,18 +47,31 @@ export function IngredientForm({ onGenerate }: IngredientFormProps) {
     setIsLoading(true);
     setSuggestions(null);
 
-    const result = await getSuggestions(values);
+    const [suggestionsResult, recipesResult] = await Promise.all([
+      getSuggestions(values),
+      getRecipes(values),
+    ]);
 
-    if (result.success && result.data) {
-      setSuggestions(result.data);
-      onGenerate();
+    if (suggestionsResult.success && suggestionsResult.data) {
+      setSuggestions(suggestionsResult.data);
     } else {
       toast({
         variant: "destructive",
         title: "Error",
-        description: result.error,
+        description: suggestionsResult.error,
       });
     }
+
+    if (recipesResult.success && recipesResult.data) {
+      onRecipesGenerated(recipesResult.data);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: recipesResult.error,
+      });
+    }
+
 
     setIsLoading(false);
   };

@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { SuggestAdditionalIngredientsOutput } from "@/ai/flows/suggest-additional-ingredients";
+import type { SuggestAdditionalIngredientsOutput } from "@/ai/types";
 
 type SuggestedIngredientsProps = {
   suggestions: SuggestAdditionalIngredientsOutput;

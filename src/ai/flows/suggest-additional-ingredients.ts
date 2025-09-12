@@ -4,43 +4,20 @@
  * @fileOverview A flow for suggesting additional ingredients based on the user's current ingredients.
  *
  * @exported {
- *   SuggestAdditionalIngredientsInput - The input type for the suggestAdditionalIngredients function.
- *   SuggestAdditionalIngredientsOutput - The return type for the suggestAdditionalIngredients function.
  *   suggestAdditionalIngredients - A function that suggests additional ingredients.
  * }
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-
-const SuggestAdditionalIngredientsInputSchema = z.object({
-  ingredients: z
-    .string()
-    .describe('A comma-separated list of ingredients the user has on hand.'),
-});
-export type SuggestAdditionalIngredientsInput = z.infer<
-  typeof SuggestAdditionalIngredientsInputSchema
->;
-
-const SuggestAdditionalIngredientsOutputSchema = z.object({
-  suggestedIngredients: z
-    .string()
-    .describe(
-      'A comma-separated list of ingredients that complement the user provided ingredients.'
-    ),
-  possibleRecipes: z
-    .string()
-    .describe(
-      'A comma-separated list of possible recipes that can be made with the suggested ingredients.'
-    ),
-});
-export type SuggestAdditionalIngredientsOutput = z.infer<
-  typeof SuggestAdditionalIngredientsOutputSchema
->;
+import {
+  SuggestAdditionalIngredientsInputSchema,
+  SuggestAdditionalIngredientsOutputSchema,
+  type SuggestAdditionalIngredientsInput,
+} from '@/ai/types';
 
 export async function suggestAdditionalIngredients(
   input: SuggestAdditionalIngredientsInput
-): Promise<SuggestAdditionalIngredientsOutput> {
+): Promise<any> {
   return suggestAdditionalIngredientsFlow(input);
 }
 
