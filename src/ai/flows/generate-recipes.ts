@@ -34,7 +34,7 @@ const generateRecipesPrompt = ai.definePrompt({
   
   Given a list of ingredients, you will generate a list of 6 diverse and interesting recipes that can be made. 
   
-  For each recipe, provide a unique ID, a title, a short description, the estimated time in minutes, the cuisine type, and a 1-2 word hint for an image search.
+  For each recipe, provide a unique ID, a title, a short description, a detailed list of ingredients, step-by-step instructions, the estimated time in minutes, the cuisine type, and a 1-2 word hint for an image search.
   
   Ensure the recipes are varied in cuisine and cooking time.
 

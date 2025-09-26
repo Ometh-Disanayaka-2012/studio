@@ -9,24 +9,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-type Recipe = {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-  dataAiHint: string;
-  time: number;
-  cuisine: string;
-};
+import { Recipe } from "@/ai/types";
 
 type RecipeCardProps = {
   recipe: Recipe;
+  onClick: () => void;
 };
 
-export function RecipeCard({ recipe }: RecipeCardProps) {
+export function RecipeCard({ recipe, onClick }: RecipeCardProps) {
   return (
-    <Card className="flex flex-col h-full overflow-hidden transition-transform transform hover:-translate-y-1 hover:shadow-lg">
+    <Card 
+      className="flex flex-col h-full overflow-hidden transition-transform transform hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+      onClick={onClick}
+    >
       <CardHeader className="p-0">
         <div className="relative h-48 w-full">
           <Image

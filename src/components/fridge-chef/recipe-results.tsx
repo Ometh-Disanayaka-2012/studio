@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import Image from "next/image";
+import { useState, useMemo } from "react";
 import { CookingPot } from "lucide-react";
 import { RecipeCard } from "./recipe-card";
 import { RecipeFilters } from "./recipe-filters";
-import type { GenerateRecipesOutput } from "@/ai/types";
+import { RecipeDetailDialog } from "./recipe-detail-dialog";
+import type { GenerateRecipesOutput, Recipe } from "@/ai/types";
 
 const cuisines = ["All", "Italian", "Asian", "Mexican", "American", "French", "Indian", "Other"];
 
@@ -16,6 +16,7 @@ type RecipeResultsProps = {
 export function RecipeResults({ recipes }: RecipeResultsProps) {
   const [cuisineFilter, setCuisineFilter] = useState("All");
   const [timeFilter, setTimeFilter] = useState(120); // max time in minutes
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   const filteredRecipes = useMemo(() => {
     if (!recipes) return [];
@@ -53,7 +54,7 @@ export function RecipeResults({ recipes }: RecipeResultsProps) {
       {filteredRecipes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={recipe} onClick={() => setSelectedRecipe(recipe)} />
           ))}
         </div>
       ) : (
@@ -65,6 +66,13 @@ export function RecipeResults({ recipes }: RecipeResultsProps) {
               Try adjusting your cuisine or time preferences.
             </p>
           </div>
+      )}
+      {selectedRecipe && (
+        <RecipeDetailDialog
+          recipe={selectedRecipe}
+          isOpen={!!selectedRecipe}
+          onClose={() => setSelectedRecipe(null)}
+        />
       )}
     </div>
   );
